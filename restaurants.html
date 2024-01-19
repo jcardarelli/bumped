@@ -1,0 +1,22 @@
+<table>
+	<thead>
+		<tr>
+			<th scope="col">ID</th>
+			<th scope="col">Name</th>
+			<th scope="col">Stars</th>
+			<th scope="col">Chef</th>
+			<th scope="col">Address</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{range .restaurants}}
+			<tr>
+				<th scope="row">1</th>
+				<td>{{.Name}}</td>
+				<td>{{.Stars}}</td>
+				<td>{{.Chef}}</td>
+				<td>{{.Address}}</td>
+			</tr>
+		{{end}}
+	</tbody>
+</table>
