@@ -79,7 +79,13 @@ func GetRestaurants(c *gin.Context) {
 	var restaurants []Restaurant
 	for rows.Next() {
 		var restaurant Restaurant
-		err := rows.Scan(&restaurant.ID, &restaurant.Name, &restaurant.Stars, &restaurant.Address, &restaurant.Chef)
+		err := rows.Scan(
+			&restaurant.ID,
+			&restaurant.Name,
+			&restaurant.Stars,
+			&restaurant.Address,
+			&restaurant.Chef,
+		)
 		if err != nil {
 			log.Println("Error scanning row:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -132,8 +138,13 @@ func CreateRestaurant(c *gin.Context) {
 		return
 	}
 
-	result, readErr := db.Exec("INSERT INTO restaurants (name, stars, address, chef) VALUES (?, ?, ?, ?)",
-		newRestaurant.Name, newRestaurant.Stars, newRestaurant.Address, newRestaurant.Chef)
+	result, readErr := db.Exec(
+		"INSERT INTO restaurants (name, stars, address, chef) VALUES (?, ?, ?, ?)",
+		newRestaurant.Name,
+		newRestaurant.Stars,
+		newRestaurant.Address,
+		newRestaurant.Chef,
+	)
 	if readErr != nil {
 		log.Println("Error inserting into database:", readErr)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -168,8 +179,14 @@ func UpdateRestaurant(c *gin.Context) {
 	}
 
 	// Update the existing restaurant with the new data
-	_, err = db.Exec("UPDATE restaurants SET name = ?, stars = ?, address = ?, chef = ? WHERE id = ?",
-		updatedRestaurant.Name, updatedRestaurant.Stars, updatedRestaurant.Address, updatedRestaurant.Chef, id)
+	_, err = db.Exec(
+		"UPDATE restaurants SET name = ?, stars = ?, address = ?, chef = ? WHERE id = ?",
+		updatedRestaurant.Name,
+		updatedRestaurant.Stars,
+		updatedRestaurant.Address,
+		updatedRestaurant.Chef,
+		id,
+	)
 	if err != nil {
 		log.Println("Error updating restaurant:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
