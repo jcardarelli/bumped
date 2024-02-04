@@ -9,15 +9,23 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	// Importing a package with an underscore allows us to create the package level variables and also execute the init function
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type Restaurant struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Stars   int    `json:"stars"`
-	Address string `json:"address"`
-	Chef    string `json:"chef"`
+	ID      int      `json:"id"`
+	Name    string   `json:"name"`
+	Stars   int      `json:"stars"`
+	Address string   `json:"address"`
+	State   string   `json:"state"`
+	Hours   string   `json:"hours"`
+	Chef    string   `json:"chef"`
+	Staff   []string `json:"staff"`
+	Photos  []string `json:"photos"`
+	Website string   `json:"website"`
+	Info    string   `json:"info"`
+	Menus   []string `json:"menus"`
 }
 
 var db *sql.DB
@@ -44,12 +52,16 @@ func main() {
 		log.Fatal("Error creating table:", err)
 	}
 
+	// TODO: Rename r to router
 	// Load gin and HTML template support
 	r := gin.Default()
 	r.LoadHTMLGlob("*.html")
 
 	// Route to get all restaurants
 	r.GET("/api/v1/restaurants/get", GetRestaurants)
+
+	// Route to get a single restaurant page by ID in the database
+	r.GET("/api/v1/restaurant/:id", GetRestaurantByID)
 
 	// Route to create a new restaurant
 	r.POST("/api/v1/restaurants/create", CreateRestaurant)
@@ -61,7 +73,7 @@ func main() {
 	r.DELETE("/api/v1/restaurants/delete/:id", DeleteRestaurant)
 
 	// Run the Gin server and check for errors
-	if err := r.Run(":8081"); err != nil {
+	if err := r.Run(":8083"); err != nil {
 		log.Fatal("Error starting Gin server:", err)
 	}
 }
@@ -99,7 +111,48 @@ func GetRestaurants(c *gin.Context) {
 		"title":       "Restaurants List",
 		"restaurants": restaurants,
 	})
-	// c.JSON(http.StatusOK, restaurants)
+}
+
+// GetRestaurantByID returns info about a single restaurant
+func GetRestaurantByID(c *gin.Context) {
+	var restaurant Restaurant
+
+	// Input parameters from URI
+	id := c.Param("id")
+
+	// Validate that the restaurant with this name exists in the database
+	sqlStatement := `SELECT id, name, stars, address, state, website, chef, info
+					 FROM restaurants
+					 WHERE id = $1`
+
+	row := db.QueryRow(sqlStatement, id)
+	switch err := row.Scan(
+		&restaurant.ID,
+		&restaurant.Name,
+		&restaurant.Stars,
+		&restaurant.Address,
+		&restaurant.State,
+		&restaurant.Website,
+		&restaurant.Chef,
+		&restaurant.Info,
+	); err {
+	case sql.ErrNoRows:
+		c.JSON(http.StatusNotFound, gin.H{"error": "Restaurant not found"})
+	case nil:
+		// Render HTML using the built-in HTML rendering
+		c.HTML(http.StatusOK, "restaurant.html", gin.H{
+			"ID":      restaurant.ID,
+			"Name":    restaurant.Name,
+			"Stars":   restaurant.Stars,
+			"Address": restaurant.Address,
+			"State":   restaurant.State,
+			"Website": restaurant.Website,
+			"Chef":    restaurant.Chef,
+			"Info":    restaurant.Info,
+		})
+	default:
+		panic(err)
+	}
 }
 
 // CreateRestaurant creates a new restaurant

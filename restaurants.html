@@ -1,22 +1,22 @@
-<table>
-	<thead>
-		<tr>
-			<th scope="col">ID</th>
-			<th scope="col">Name</th>
-			<th scope="col">Stars</th>
-			<th scope="col">Chef</th>
-			<th scope="col">Address</th>
-		</tr>
-	</thead>
-	<tbody>
-		{{range .restaurants}}
+<article>
+	<table>
+		<thead>
 			<tr>
-				<th scope="row">1</th>
-				<td>{{.Name}}</td>
-				<td>{{.Stars}}</td>
-				<td>{{.Chef}}</td>
-				<td>{{.Address}}</td>
+				<th scope="col">Name</th>
+				<th scope="col">Stars</th>
+				<th scope="col">Chef</th>
+				<th scope="col">Address</th>
 			</tr>
-		{{end}}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{{range .restaurants}}
+				<tr restaurantID="{{.ID}}">
+					<td><a hx-get="http://localhost:8083/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
+					<td>{{.Stars}}</td>
+					<td><a href="#">{{.Chef}}</a></td>
+					<td>{{.Address}}</td>
+				</tr>
+			{{end}}
+		</tbody>
+	</table>
+</article>
