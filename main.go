@@ -2,8 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
-	"io"
 	"log"
 	"net/http"
 
@@ -160,46 +158,18 @@ func GetRestaurantByID(c *gin.Context) {
 
 // CreateRestaurant creates a new restaurant
 func CreateRestaurant(c *gin.Context) {
-	var newRestaurant Restaurant
-
-	// Read the request body
-	body, readErr := io.ReadAll(c.Request.Body)
-	log.Println("request body contains: ", string(body))
-	// log.Println("name: ", newRestaurant.Name)
-	// log.Println("address: ", newRestaurant.Address)
-	// log.Println("chef: ", newRestaurant.Chef)
-	// log.Println("stars: ", newRestaurant.Stars)
-	// log.Println("id: ", newRestaurant.ID)
-	if readErr != nil {
-		log.Println("Error reading request body:", readErr)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
-	}
-
-	// Unmarshal the JSON data into the newRestaurant struct
-	if unMarshallErr := json.Unmarshal(body, &newRestaurant); readErr != nil {
-		log.Println("Error unmarshalling JSON:", unMarshallErr)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	} else {
-		log.Println("unmarshalled json ok")
-		log.Println("c.ShouldBindJSON(&newRestaurant)", c.ShouldBindJSON(&newRestaurant))
-		log.Printf("Unmarshalled Data: %+v", newRestaurant)
-	}
-
-	// Validate that we can parse the JSON before writing to database
-	if bindErr := c.ShouldBindJSON(&newRestaurant); bindErr != nil {
-		log.Println("Error binding JSON:", bindErr)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	}
+	name := c.PostForm("name")
+	stars := c.PostForm("stars")
+	address := c.PostForm("address")
+	chef := c.PostForm("chef")
 
 	result, readErr := db.Exec(
-		"INSERT INTO restaurants (name, stars, address, chef) VALUES (?, ?, ?, ?)",
-		newRestaurant.Name,
-		newRestaurant.Stars,
-		newRestaurant.Address,
-		newRestaurant.Chef,
+		`INSERT INTO restaurants (name, stars, address, chef)
+	     VALUES (?, ?, ?, ?)`,
+		name,
+		stars,
+		address,
+		chef,
 	)
 	if readErr != nil {
 		log.Println("Error inserting into database:", readErr)
@@ -207,10 +177,11 @@ func CreateRestaurant(c *gin.Context) {
 		return
 	}
 
-	newID, _ := result.LastInsertId()
-	newRestaurant.ID = int(newID)
-
-	c.JSON(http.StatusCreated, newRestaurant)
+	newID, err := result.LastInsertId()
+	if err != nil {
+		log.Fatalln("failed to insert into database")
+	}
+	c.JSON(http.StatusCreated, int(newID))
 }
 
 // UpdateRestaurant updates an existing restaurant by ID
