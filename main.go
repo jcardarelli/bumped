@@ -46,7 +46,10 @@ func main() {
 			name TEXT NOT NULL,
 			stars INTEGER NOT NULL,
 			address TEXT NOT NULL,
-			chef TEXT NOT NULL
+			chef TEXT NOT NULL,
+			state TEXT NOT NULL,
+			website TEXT NOT NULL,
+			info TEXT NOT NULL
 		);
 	`)
 	if err != nil {
