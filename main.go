@@ -58,7 +58,7 @@ func main() {
 
 	// Load gin and HTML template support
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*.html")
+	router.LoadHTMLGlob("templates/*.tmpl")
 
 	// Route to get all restaurants
 	router.GET("/api/v1/restaurants/get", GetRestaurants)
@@ -110,7 +110,7 @@ func GetRestaurants(c *gin.Context) {
 	}
 
 	// Render HTML using the built-in HTML rendering
-	c.HTML(http.StatusOK, "templates/restaurants.html", gin.H{
+	c.HTML(http.StatusOK, "templates/restaurants.tmpl", gin.H{
 		"title":       "Restaurants List",
 		"restaurants": restaurants,
 	})
@@ -143,7 +143,7 @@ func GetRestaurantByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Restaurant not found"})
 	case nil:
 		// Render HTML using the built-in HTML rendering
-		c.HTML(http.StatusOK, "templates/restaurant.html", gin.H{
+		c.HTML(http.StatusOK, "templates/restaurant.tmpl", gin.H{
 			"ID":      restaurant.ID,
 			"Name":    restaurant.Name,
 			"Stars":   restaurant.Stars,
