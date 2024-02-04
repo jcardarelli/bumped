@@ -9,7 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	// Importing a package with an underscore allows us to create the package level variables and also execute the init function
+	// Importing a package with an underscore allows us to create the package
+	// level variables and also execute the init function
 	_ "github.com/mattn/go-sqlite3"
 )
 
