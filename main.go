@@ -52,28 +52,27 @@ func main() {
 		log.Fatal("Error creating table:", err)
 	}
 
-	// TODO: Rename r to router
 	// Load gin and HTML template support
-	r := gin.Default()
-	r.LoadHTMLGlob("*.html")
+	router := gin.Default()
+	router.LoadHTMLGlob("*.html")
 
 	// Route to get all restaurants
-	r.GET("/api/v1/restaurants/get", GetRestaurants)
+	router.GET("/api/v1/restaurants/get", GetRestaurants)
 
 	// Route to get a single restaurant page by ID in the database
-	r.GET("/api/v1/restaurant/:id", GetRestaurantByID)
+	router.GET("/api/v1/restaurant/:id", GetRestaurantByID)
 
 	// Route to create a new restaurant
-	r.POST("/api/v1/restaurants/create", CreateRestaurant)
+	router.POST("/api/v1/restaurants/create", CreateRestaurant)
 
 	// Route to update a restaurant by ID
-	r.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
+	router.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
 
 	// Route to delete a restaurant by ID
-	r.DELETE("/api/v1/restaurants/delete/:id", DeleteRestaurant)
+	router.DELETE("/api/v1/restaurants/delete/:id", DeleteRestaurant)
 
 	// Run the Gin server and check for errors
-	if err := r.Run(":8083"); err != nil {
+	if err := router.Run(":8083"); err != nil {
 		log.Fatal("Error starting Gin server:", err)
 	}
 }
