@@ -60,9 +60,9 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl")
 
 	// Route to get all restaurants
-	router.GET("/api/v1/restaurants", GetRestaurants)
+	router.GET("/api/v1/restaurants", GetRestaurantsHTML)
 
-	// Route to get a single restaurant page by ID in the database
+	// Route to get a single restaurant page by ID
 	router.GET("/api/v1/restaurant/:id", GetRestaurantByID)
 
 	// Route to create a new restaurant
@@ -80,8 +80,8 @@ func main() {
 	}
 }
 
-// GetRestaurants returns a list of all restaurants
-func GetRestaurants(c *gin.Context) {
+// GetRestaurantsHTML returns a list of all restaurants
+func GetRestaurantsHTML(c *gin.Context) {
 	rows, err := db.Query("SELECT id, name, stars, address, chef FROM restaurants")
 	if err != nil {
 		log.Println("Error retrieving restaurants:", err)
