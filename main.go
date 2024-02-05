@@ -60,7 +60,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl")
 
 	// Route to get all restaurants
-	router.GET("/api/v1/restaurants/get", GetRestaurants)
+	router.GET("/api/v1/restaurants", GetRestaurants)
 
 	// Route to get a single restaurant page by ID in the database
 	router.GET("/api/v1/restaurant/:id", GetRestaurantByID)
