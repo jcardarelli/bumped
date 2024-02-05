@@ -63,7 +63,7 @@ func main() {
 	router.GET("/api/v1/restaurants", GetRestaurantsHTML)
 
 	// Route to get a single restaurant page by ID
-	router.GET("/api/v1/restaurant/:id", GetRestaurantByID)
+	router.GET("/api/v1/restaurant/:id", GetRestaurantByIdHTML)
 
 	// Route to create a new restaurant
 	router.POST("/api/v1/restaurant/create", CreateRestaurant)
@@ -115,8 +115,8 @@ func GetRestaurantsHTML(c *gin.Context) {
 	})
 }
 
-// GetRestaurantByID returns info about a single restaurant
-func GetRestaurantByID(c *gin.Context) {
+// GetRestaurantByIdHTML returns info about a single restaurant
+func GetRestaurantByIdHTML(c *gin.Context) {
 	var restaurant Restaurant
 
 	// Input parameters from URI
