@@ -199,7 +199,12 @@ func UpdateRestaurant(c *gin.Context) {
 	// Check if the restaurant with the given ID exists
 	var existingRestaurant Restaurant
 	err := db.QueryRow("SELECT id, name, stars, address, chef FROM restaurants WHERE id = ?", id).
-		Scan(&existingRestaurant.ID, &existingRestaurant.Name, &existingRestaurant.Stars, &existingRestaurant.Address, &existingRestaurant.Chef)
+		Scan(
+			&existingRestaurant.ID,
+			&existingRestaurant.Name,
+			&existingRestaurant.Stars,
+			&existingRestaurant.Address,
+			&existingRestaurant.Chef)
 	if err != nil {
 		log.Println("Error querying existing restaurant:", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Restaurant not found"})
