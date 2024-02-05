@@ -66,7 +66,7 @@ func main() {
 	router.GET("/api/v1/restaurant/:id", GetRestaurantByID)
 
 	// Route to create a new restaurant
-	router.POST("/api/v1/restaurants/create", CreateRestaurant)
+	router.POST("/api/v1/restaurant/create", CreateRestaurant)
 
 	// Route to update a restaurant by ID
 	router.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
