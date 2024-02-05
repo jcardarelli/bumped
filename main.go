@@ -66,7 +66,7 @@ func main() {
 	router.GET("/api/v1/restaurant/:id", GetRestaurantByIdHTML)
 
 	// Route to create a new restaurant
-	router.POST("/api/v1/restaurant/create", CreateRestaurant)
+	router.POST("/api/v1/restaurant/create", CreateRestaurantJSON)
 
 	// Route to update a restaurant by ID
 	router.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
@@ -157,8 +157,8 @@ func GetRestaurantByIdHTML(c *gin.Context) {
 	}
 }
 
-// CreateRestaurant creates a new restaurant
-func CreateRestaurant(c *gin.Context) {
+// CreateRestaurantJSON creates a new restaurant
+func CreateRestaurantJSON(c *gin.Context) {
 	name := c.PostForm("name")
 	stars := c.PostForm("stars")
 	address := c.PostForm("address")
