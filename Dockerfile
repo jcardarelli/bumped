@@ -28,9 +28,6 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Add Maintainer Info
-LABEL maintainer="YourName <your.email@example.com>"
-
 # Set the Current Working Directory inside the container
 WORKDIR /root/
 
