@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -71,7 +72,7 @@ func main() {
 	router.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
 
 	// Route to delete a restaurant by ID
-	router.DELETE("/api/v1/restaurants/delete/:id", DeleteRestaurant)
+	router.DELETE("/api/v1/restaurant/delete/:id", DeleteRestaurant)
 
 	// Run the Gin server and check for errors
 	if err := router.Run(":8083"); err != nil {
@@ -229,8 +230,17 @@ func UpdateRestaurant(c *gin.Context) {
 func DeleteRestaurant(c *gin.Context) {
 	id := c.Param("id")
 	log.Println("deleting id:", id)
+	if id == "" {
+		log.Fatalln("id provided to DeleteRestaurant() is nil")
+	}
 
-	result, err := db.Exec("DELETE FROM restaurants WHERE id = ?", id)
+	statement, err := db.Prepare(`DELETE FROM restaurants WHERE id = ?`)
+	if err != nil {
+		log.Fatalln("failed to prepare delete statement", statement)
+	}
+	defer statement.Close()
+
+	result, err := statement.Exec(id)
 	if err != nil {
 		log.Println("Error deleting restaurant:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -243,5 +253,8 @@ func DeleteRestaurant(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Restaurant deleted successfully"})
+	deletedText := fmt.Sprintf("Deleted %s", id)
+	c.HTML(http.StatusOK, "templates/deleted.tmpl", gin.H{
+		"deletedText": deletedText,
+	})
 }
