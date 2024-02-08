@@ -1,26 +1,24 @@
 {{define "templates/restaurants.tmpl"}}
-<article>
-	<table>
-		<thead>
-			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Stars</th>
-				<th scope="col">Chef</th>
-				<th scope="col">Address</th>
-				<th scope="col">Delete</th>
+<table>
+	<thead>
+		<tr>
+			<th scope="col">Name</th>
+			<th scope="col">Stars</th>
+			<th scope="col">Chef</th>
+			<th scope="col">Address</th>
+			<th scope="col">Delete</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{range .restaurants}}
+			<tr restaurantID="{{.ID}}">
+				<td><a hx-get="http://localhost:8083/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
+				<td>{{.Stars}}</td>
+				<td><a href="#">{{.Chef}}</a></td>
+				<td>{{.Address}}</td>
+				<td><a hx-delete="http://localhost:8083/api/v1/restaurant/delete/{{.ID}}" hx-trigger="click">Delete</a></td>
 			</tr>
-		</thead>
-		<tbody>
-			{{range .restaurants}}
-				<tr restaurantID="{{.ID}}">
-					<td><a hx-get="http://localhost:8083/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
-					<td>{{.Stars}}</td>
-					<td><a href="#">{{.Chef}}</a></td>
-					<td>{{.Address}}</td>
-					<td><a hx-delete="http://localhost:8083/api/v1/restaurant/delete/{{.ID}}" hx-trigger="click">Delete</a></td>
-				</tr>
-			{{end}}
-		</tbody>
-	</table>
-</article>
+		{{end}}
+	</tbody>
+</table>
 {{end}}
