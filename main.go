@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -258,7 +257,7 @@ func DeleteRestaurant(c *gin.Context) {
 		return
 	}
 
-	deletedText := fmt.Sprintf("Deleted %s", id)
+	deletedText := "Deleted"
 	c.HTML(http.StatusOK, "templates/deleted.tmpl", gin.H{
 		"deletedText": deletedText,
 	})
