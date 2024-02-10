@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -68,7 +69,7 @@ func main() {
 	router.POST("/api/v1/restaurant/create", CreateRestaurantJSON)
 
 	// Route to update a restaurant by ID
-	router.PUT("/api/v1/restaurants/update/:id", UpdateRestaurant)
+	router.PATCH("/api/v1/restaurant/update/:id", UpdateRestaurant)
 
 	// Route to delete a restaurant by ID
 	router.DELETE("/api/v1/restaurant/delete/:id", DeleteRestaurant)
@@ -186,24 +187,39 @@ func CreateRestaurantJSON(c *gin.Context) {
 
 // UpdateRestaurant updates an existing restaurant by ID
 func UpdateRestaurant(c *gin.Context) {
-	id := c.Param("id")
+	id := c.PostForm("updateId")
+	name := c.PostForm("updateName")
+	stars := c.PostForm("updateStars")
+	address := c.PostForm("updateAddress")
+	chef := c.PostForm("updateChef")
+	fmt.Println("fields:", name, stars, address, chef)
+
+	if name == "" {
+		log.Fatalln("name is blank")
+	}
+	if stars == "" {
+		log.Fatalln("stars are blank")
+	}
+	if address == "" {
+		log.Fatalln("address is blank")
+	}
+	if chef == "" {
+		log.Fatalln("chef is blank")
+	}
 
 	var updatedRestaurant Restaurant
-	if err := c.ShouldBindJSON(&updatedRestaurant); err != nil {
-		log.Println("Error binding JSON:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	}
 
 	// Check if the restaurant with the given ID exists
 	var existingRestaurant Restaurant
-	err := db.QueryRow("SELECT id, name, stars, address, chef FROM restaurants WHERE id = ?", id).
+	err := db.QueryRow("SELECT id, name, stars, address, chef, website, info FROM restaurants WHERE id = ?", id).
 		Scan(
 			&existingRestaurant.ID,
 			&existingRestaurant.Name,
 			&existingRestaurant.Stars,
 			&existingRestaurant.Address,
-			&existingRestaurant.Chef)
+			&existingRestaurant.Chef,
+			&existingRestaurant.Website,
+			&existingRestaurant.Info)
 	if err != nil {
 		log.Println("Error querying existing restaurant:", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Restaurant not found"})
@@ -213,10 +229,10 @@ func UpdateRestaurant(c *gin.Context) {
 	// Update the existing restaurant with the new data
 	_, err = db.Exec(
 		"UPDATE restaurants SET name = ?, stars = ?, address = ?, chef = ? WHERE id = ?",
-		updatedRestaurant.Name,
-		updatedRestaurant.Stars,
-		updatedRestaurant.Address,
-		updatedRestaurant.Chef,
+		name,
+		stars,
+		address,
+		chef,
 		id,
 	)
 	if err != nil {
