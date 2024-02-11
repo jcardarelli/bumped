@@ -11,7 +11,7 @@
 			<th scope="col">Update</th>
 		</tr>
 	</thead>
-	<tbody id="restaurants-table" class="included-data">
+	<tbody id="restaurants-table" hx-confirm="Are you sure?" hx-target="closest tr" class="included-data">
 		{{range .restaurants}}
 			<tr restaurantID="{{.ID}}">
 				<td contenteditable="true"><a hx-get="http://localhost:8083/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
