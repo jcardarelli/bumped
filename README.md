@@ -5,6 +5,12 @@ Golang API for managing restaurant info
 * Gin Web Framework for routing
 * Sqlite for database
 
+## Docker
+```
+docker build -t bumped:latest .
+docker run -p 8083:8083 --rm bumped:latest
+```
+
 ## Build
 ```
 go build -o bumped
