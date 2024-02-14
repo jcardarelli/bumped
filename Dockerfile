@@ -4,10 +4,11 @@ ENV CGO_ENABLED=1
 RUN apk add --no-cache \
     gcc \
     musl-dev
-COPY go.mod go.sum main.go /build/
+COPY go.mod go.sum vendor main.go /build/
 COPY templates/ /build/templates/
-RUN go mod download && \
-	go build -a -installsuffix cgo -o bumped .
+RUN go mod tidy && \
+    go mod vendor && \
+    go build -mod vendor -installsuffix cgo -o bumped .
 
 FROM alpine:latest
 WORKDIR /app/
