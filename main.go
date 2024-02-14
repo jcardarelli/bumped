@@ -33,6 +33,15 @@ var db *sql.DB
 
 func main() {
 	var err error
+	// Fail if the DB env var is not set
+	dbEnvVarValue, dbEnvVarPresent := os.LookupEnv("DB")
+	if !dbEnvVarPresent {
+		log.Fatalln("env var DB must be set")
+	}
+	// Fail if the DB env var value is set to an empty string
+	if dbEnvVarValue == "" {
+		log.Fatalln("env var DB must not be empty")
+	}
 	db, err = sql.Open("sqlite3", os.Getenv("DB"))
 	if err != nil {
 		log.Fatal("Error opening database:", err)
