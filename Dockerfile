@@ -11,6 +11,7 @@ RUN go mod tidy && \
     go build -mod vendor -installsuffix cgo -o bumped .
 
 FROM alpine:latest
+ARG DB=nocodb/restaurants.db
 WORKDIR /app/
 ENV GIN_MODE=debug
 COPY --from=build /build/templates/ ./templates/

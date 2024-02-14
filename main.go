@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -32,7 +33,7 @@ var db *sql.DB
 
 func main() {
 	var err error
-	db, err = sql.Open("sqlite3", "./nocodb/restaurants.db")
+	db, err = sql.Open("sqlite3", os.Getenv("DB"))
 	if err != nil {
 		log.Fatal("Error opening database:", err)
 	}
