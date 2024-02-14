@@ -76,7 +76,7 @@ func main() {
 	router.DELETE("/api/v1/restaurant/delete/:id", DeleteRestaurant)
 
 	// Run the Gin server and check for errors
-	if err := router.Run(":8083"); err != nil {
+	if err := router.Run("0.0.0.0:8083"); err != nil {
 		log.Fatal("Error starting Gin server:", err)
 	}
 }
