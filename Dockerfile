@@ -12,8 +12,8 @@ RUN go mod tidy && \
 
 FROM alpine:latest
 ARG DB=nocodb/restaurants.db
+ENV GIN_MODE=release
 WORKDIR /app/
-ENV GIN_MODE=debug
 COPY --from=build /build/templates/ ./templates/
 COPY --from=build /build/bumped .
 RUN mkdir /app/nocodb
