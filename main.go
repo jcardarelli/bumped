@@ -42,6 +42,7 @@ func main() {
 	if dbEnvVarValue == "" {
 		log.Fatalln("env var DB must not be empty")
 	}
+	// Fail if the DB env var doesn't resolve to an actual file?
 	db, err = sql.Open("sqlite3", os.Getenv("DB"))
 	if err != nil {
 		log.Fatal("Error opening database:", err)
