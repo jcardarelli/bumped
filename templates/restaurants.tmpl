@@ -14,12 +14,12 @@
 	<tbody id="restaurants-table" hx-target="closest tr" class="included-data">
 		{{range .restaurants}}
 			<tr restaurantID="{{.ID}}">
-				<td contenteditable="true"><a hx-get="/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
+				<td contenteditable="true"><a hx-get="http://localhost:8083/api/v1/restaurant/{{.ID}}" hx-trigger="click" hx-target="#restaurant-list" hx-push-url="true">{{.Name}}</a></td>
 				<td contenteditable="true">{{.Stars}}</td>
 				<td contenteditable="true"><a href="#">{{.Chef}}</a></td>
 				<td contenteditable="true">{{.Address}}</td>
-				<td><button role="button" class="outline" hx-delete="/api/v1/restaurant/delete/{{.ID}}" hx-trigger="click">Delete</button></td>
-				<td><button role="button" class="outline" hx-patch="/api/v1/restaurant/update/{{.ID}}" hx-trigger="click" hx-include=".included-data">Update</button></td>
+				<td><button role="button" class="outline" hx-delete="http://localhost:8083/api/v1/restaurant/delete/{{.ID}}" hx-trigger="click">Delete</button></td>
+				<td><button role="button" class="outline" hx-patch="http://localhost:8083/api/v1/restaurant/update/{{.ID}}" hx-trigger="click" hx-include=".included-data">Update</button></td>
 			</tr>
 		{{end}}
 	</tbody>
